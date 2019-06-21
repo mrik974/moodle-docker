@@ -9,13 +9,13 @@ services:
       - MYSQL_PASSWORD=password
     volumes:
       - ./.data/db:/var/lib/mysql
-    ports:
-      - 3306:3306
+    #ports:
+      #- 3306:3306
   web:
-    image: lthub/moodle
-    build: .
+    image: mrik974/nonroot-moodle:3.7.0-moosh
+    # build: .
     ports:
-      - 8080:80
+      - 8080:8080
     # use the links section if you want to use a container for a database.
     # if not, and you want to use an external database server, configure
     # if with the environment variables in the 'environment' section.
@@ -45,10 +45,10 @@ services:
       #- MOODLE_ADMIN_EMAIL=
       #- MOODLE_UPDATE=
       #- MOODLE_SSL_PROXY=false
-      - MOODLE_REDIS_HOST=redis
-      - MOODLE_REDIS_PORT=6379
-      - MOODLE_REDIS_DB=0
-      #- MOODLE_REDIS_PREFIX=''
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_DB=0
+      #- REDIS_PREFIX=''
       - MOODLE_DISABLE_UPDATE_AUTODEPLOY=true
       #- MOODLE_DEBUG=true
       #- SMTP_HOST=example.com:465
@@ -61,5 +61,5 @@ services:
     image: redis:5.0-alpine
     volumes:
       - ./.data/redis:/data
-    ports:
-      - 6379:6379
+    #ports:
+     # - 6379:6379
