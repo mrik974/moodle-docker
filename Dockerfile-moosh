@@ -1,39 +1,7 @@
-FROM php:7.2-apache
-LABEL maintainer="Emeric Lebon <emeric.lebon@madelink.fr>"
-LABEL version="3.7.0"
-LABEL description="This is an image of a Moodle runtime made for running on non root environments like Openshift"
+FROM mrik974/nonroot-moodle:3.6.4-fr
+LABEL description="This is an image of a Moodle runtime made for running on non root environments like Openshift with Moosh installed"
 
-ENV MOODLE_VERSION=3.7.0
-ENV UPLOAD_MAX_FILESIZE=50M
-
-ARG DEBIAN_FRONTEND=noninteractive
-
-WORKDIR /var/www/html
-
-RUN apt-get update \
-    && apt-get -qq install graphviz aspell ghostscript libpspell-dev libpng-dev libicu-dev libxml2-dev libldap2-dev sudo netcat unzip \
-    && docker-php-ext-install -j$(nproc) pspell gd intl xml xmlrpc ldap zip soap mbstring mysqli opcache \
-    && pecl install redis \
-    && docker-php-ext-enable redis \
-    && curl -L https://github.com/moodle/moodle/archive/v${MOODLE_VERSION}.tar.gz | tar xz --strip=1 \
-    && mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
-    && mkdir -p /moodledata /var/local/cache \
-    && chown -R www-data:www-data /moodledata \
-    && chmod -R 777 /moodledata /var/local/cache \
-    && chmod -R 0755 /var/www/html \
-    && chown -R www-data:www-data /var/www/html \
-    && mkdir /docker-entrypoint.d
-
-COPY config.php /var/www/html/
-COPY docker-entrypoint.sh /docker-entrypoint.sh
-COPY custom-php.ini $PHP_INI_DIR/conf.d/
-
-RUN chown -R www-data:www-data /var/www/html \
-    && sed -i 's/80/8080/g' /etc/apache2/sites-enabled/000-default.conf \
-    && sed -i 's/443/8443/g' /etc/apache2/sites-enabled/000-default.conf \
-    && sed -i 's/80/8080/g' /etc/apache2/ports.conf \
-    && sed -i 's/443/8443/g' /etc/apache2/ports.conf \
-    && sed -i 's/www-data:x:33:33:www-data:\/var\/www:\/usr\/sbin\/nologin/www-data:x:33:33:www-data:\/var\/www:\/bin\/sh/g' /etc/passwd
+USER root
 
 RUN apt-get -qq install git \
     && curl https://getcomposer.org/installer -o composer-install.php \
@@ -41,10 +9,10 @@ RUN apt-get -qq install git \
     && git clone git://github.com/tmuras/moosh.git \
     && cd moosh \
     && /usr/local/bin/composer install \ 
-    && ln -s $PWD/moosh.php /usr/local/bin/moosh
-
-VOLUME /moodledata
-EXPOSE 8080
+    && ln -s $PWD/moosh.php /usr/local/bin/moosh \
+    && mkdir /var/www/.moosh \
+    && chown -R www-data:www-data /var/www/.moosh \
+    && chmod -R 777 /var/www/.moosh
 
 USER www-data
 

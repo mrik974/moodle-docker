@@ -12,8 +12,11 @@ services:
     #ports:
       #- 3306:3306
   web:
-    image: mrik974/nonroot-moodle:3.7.0-moosh
+    image: mrik974/nonroot-moodle:3.6.4-fr-moosh
     # build: .
+    depends_on:
+      - db
+      - redis
     ports:
       - 8080:8080
     # use the links section if you want to use a container for a database.
@@ -24,7 +27,8 @@ services:
       - db
     # uncomment the 'volumes' section to enable a shared volume with docker-compose
     volumes:
-      - ./.data/web:/moodledata:rw
+      - ./.data/web/temp:/moodledata/temp:rw
+      - ./.data/web/filedir:/moodledata/filedir:rw
       # do not uncomment this when starting a new instance from scratch as
       # init script won't be able to move this file
       #- ./LocalSettings.php:/var/www/html/LocalSettings.php
@@ -39,7 +43,7 @@ services:
       - MOODLE_URL=http://localhost:8080
       #- MOODLE_SITE_FULLNAME=
       #- MOODLE_SITE_SHORTNAME=
-      #- MOODLE_SITE_LANG=
+      - MOODLE_SITE_LANG=fr
       #- MOODLE_ADMIN_USER=
       #- MOODLE_ADMIN_PASS=
       #- MOODLE_ADMIN_EMAIL=
