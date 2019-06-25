@@ -1,6 +1,5 @@
 FROM php:7.2-apache
 LABEL maintainer="Emeric Lebon <emeric.lebon@madelink.fr>"
-LABEL version="3.7.0"
 LABEL description="This is an image of a Moodle runtime made for running on non root environments like Openshift."
 
 ENV MOODLE_VERSION=3.6.4
@@ -34,8 +33,6 @@ RUN chown -R www-data:www-data /var/www/html \
     && sed -i 's/80/8080/g' /etc/apache2/ports.conf \
     && sed -i 's/443/8443/g' /etc/apache2/ports.conf \
     && sed -i 's/www-data:x:33:33:www-data:\/var\/www:\/usr\/sbin\/nologin/www-data:x:33:33:www-data:\/var\/www:\/bin\/sh/g' /etc/passwd
-
-VOLUME /moodledata
 
 EXPOSE 8080
 
