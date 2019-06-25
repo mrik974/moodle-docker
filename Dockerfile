@@ -35,13 +35,7 @@ RUN chown -R www-data:www-data /var/www/html \
     && sed -i 's/443/8443/g' /etc/apache2/ports.conf \
     && sed -i 's/www-data:x:33:33:www-data:\/var\/www:\/usr\/sbin\/nologin/www-data:x:33:33:www-data:\/var\/www:\/bin\/sh/g' /etc/passwd
 
-## UNCOMMENT THIS IF YOU DON'T WANT THE FRENCH LANGUAGE PACK
-RUN mkdir /moodledata/lang \
-    && cd /moodledata/lang && curl -L https://download.moodle.org/download.php/direct/langpack/3.7/fr.zip -o fr.zip \ 
-    && unzip fr.zip && cd /var/www/html
-
-VOLUME /moodledata/temp
-VOLUME /moodledata/filedir
+VOLUME /moodledata
 
 EXPOSE 8080
 

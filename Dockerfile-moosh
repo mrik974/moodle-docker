@@ -1,4 +1,4 @@
-FROM mrik974/nonroot-moodle:3.6.4-fr
+FROM mrik974/nonroot-moodle:3.6.4
 LABEL description="This is an image of a Moodle runtime made for running on non root environments like Openshift with Moosh installed"
 
 USER root
