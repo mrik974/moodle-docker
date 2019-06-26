@@ -9,11 +9,11 @@ services:
       - MYSQL_PASSWORD=password
     volumes:
       - ./.data/db:/var/lib/mysql
-    #ports:
-      #- 3306:3306
+    ports:
+      - 3306:3306
   web:
-    image: mrik974/nonroot-moodle:3.6.4-fr-moosh
-    # build: .
+    image: nonroot-moodle:3.6.4
+    build: .
     depends_on:
       - db
       - redis
@@ -49,9 +49,9 @@ services:
       #- MOODLE_ADMIN_EMAIL=
       #- MOODLE_UPDATE=
       #- MOODLE_SSL_PROXY=false
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - REDIS_DB=0
+      #- REDIS_HOST=redis
+      #- REDIS_PORT=6379
+      #- REDIS_DB=0
       #- REDIS_PREFIX=''
       - MOODLE_DISABLE_UPDATE_AUTODEPLOY=true
       #- MOODLE_DEBUG=true
