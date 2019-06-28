@@ -2,8 +2,10 @@ FROM php:7.2-apache
 LABEL maintainer="Emeric Lebon <emeric.lebon@madelink.fr>"
 LABEL description="This is an image of a Moodle runtime made for running on non root environments like Openshift."
 
-ENV MOODLE_VERSION=3.6.4
+ARG MOODLE_VERSION=3.6.4
 ENV UPLOAD_MAX_FILESIZE=50M
+ENV PHP_LOG_ERRORS=on
+ENV PHP_ERROR_OUTPUT=stderr
 
 ARG DEBIAN_FRONTEND=noninteractive
 
